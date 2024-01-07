@@ -1,0 +1,158 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'products/css/detail.css' %}">
+    <link rel="stylesheet" href="{% static 'products/css/navbar1.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <!--==Title============================-->
+    <title>Product Page HTML</title>
+    <!--==Poppins-font=====================-->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <!--==Using-Font-Awesome-for-Icons=====-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+    <!-- Link Swiper's CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"
+
+    />
+
+
+
+</head>
+<body>
+<!--navbar-->
+
+
+<nav class="nav">
+  <div class="container">
+      <div class="logo">
+        <a href="{% url 'home' %}">HypeJo</a>
+      </div>
+      <div id="mainListDiv" class="main_list">
+          <ul class="navlinks">
+              <li><a href="#">About</a></li>
+              <li><a href="#">Portfolio</a></li>
+              <li><a href="#">Services</a></li>
+              <li><a href="#">Contact</a></li>
+          </ul>
+      </div>
+      <span class="navTrigger">
+          <i></i>
+          <i></i>
+          <i></i>
+      </span>
+  </div>
+</nav>
+
+
+    <!--==Product-Page=================================-->
+    <section id="product-page">
+        <div class="product-details">
+            <!--**Img*************************-->
+            <div class="product-img">
+
+            <!-- Swiper Slider -->
+
+                <div class="swiper-wrapper">
+
+                <!--**1******-->
+                <div class="swiper-slide">
+                    <img src="{{ product.image.url }}" />
+                </div>
+                </div>
+                <!--social-->
+                <div class="img-social-bar">
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+            <!--**Text************************-->
+            <div class="product-text ">
+                <!--category-->
+                <span class="product-category">Market</span>
+                <h3 id="productName">{{ product.name }}</h3>
+                <span class="product-price">${{ product.price }}</span>
+                <p id="productDescription">
+                    {{ product.descrption }}
+                </p>
+                <!--size-->
+                
+
+                <!--btn-->
+                <div class="product-button">
+                    <a href="{% url 'add_product' product_id=product.id %}" class="add-bag-btn">Add To Bag</a>        
+                </div>
+                <!--help-btn-->
+                <a href="#" class="help-btn">Need Any Help?</a>
+            </div>
+        </div>
+    </section>
+
+    
+
+        <!--cardsanimation2-->
+        <div class="small-container1">
+            <h2 class="title1">Related Products</h2>
+            <div class="row">
+                {% for product in related_products %}
+                    <div class="col-4">
+                        <a href="{% url 'product_detail' product.id %}">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                            <h4>{{ product.name }}</h4>
+                            <div class="rating">
+                                <!-- Your rating stars here -->
+                            </div>
+                            <p style="color: black;">{{ product.price }}$</p>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+
+      <!-- Static product examples -->
+
+    </div>
+  </div>
+
+
+
+  <!--==Jquery===========================-->
+  <script
+  src="https://code.jquery.com/jquery-3.6.1.js"
+  integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+  crossorigin="anonymous"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+    <script>
+        $('.s-checkbox').on('change', function() {
+                $('.s-checkbox').not(this).prop('checked', false);
+            });
+    </script>
+
+        
+    <script>
+        $('.navTrigger').click(function () {
+        $(this).toggleClass('active');
+        console.log("Clicked menu");
+        $("#mainListDiv").toggleClass("show_list");
+        $("#mainListDiv").fadeIn();
+
+        });
+    </script>
+</body>
+</html>
+

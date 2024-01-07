@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block 'content' %}
+
+  
+<div class="wrap">
+  <div class="back">
+    <div class="back__slide active">
+      <div class="progress"></div>
+    </div>
+    <div class="back__slide">
+      <div class="progress"></div>
+      <div class="back-front-image"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card__slide active">
+
+      <div class="image">
+        <span class="number"></span>
+        <span class="date" id="Today's_Date"></span>
+      </div>
+    </div>
+
+    <div class="card__slide">
+
+
+
+      <div class="back-image"></div>
+      <div class="image">
+        <span class="number">02</span>
+        <span class="date" id="Today's_Time"></span>
+      </div>
+    </div>
+    <div class="content">
+      <div class="content__slide active">
+        <h2 class="title">
+          <span class="title__line">
+            <span class="title__inner">Mesmerizing</span>
+          </span>
+          <span class="title__line">
+            <span class="title__inner">Depths</span>
+          </span>
+        </h2>
+        <p class="desc">
+          Nunc orci metus, ornare non molestie ac, ultrices eget <br/> dolor. Mauris ac mattis lectus. Praesent facilisis <br/> malesuada sapien nec pharetra. Fusce eleifend, nisl.
+        </p>
+        <div class="button-wrap">
+          <a href="#" class="button">
+            Learn More
+            <span class="button__hover"></span>
+          </a>
+        </div>
+      </div>
+      <div class="content__slide">
+        <h2 class="title">
+          <span class="title__line">
+            <span class="title__inner">Breathtaking</span>
+          </span>
+          <span class="title__line">
+            <span class="title__inner">Heights</span>
+          </span>
+        </h2>
+        <p class="desc">
+          Nunc orci metus, ornare non molestie ac, ultrices eget  <br/> dolor. Mauris ac mattis lectus. Praesent facilisis  <br/> malesuada sapien nec pharetra. Fusce eleifend, nisl.
+        </p>
+        <div class="button-wrap">
+          <a href="#" class="button">
+            Learn More
+            <span class="button__hover"></span>
+          </a>
+        </div>
+      </div>
+      <div class="content__ping content__ping--noanimation"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="slider-wrapper">
+    <button id="prev-slide" class="slide-button material-symbols-rounded">
+      chevron_left
+    </button>
+
+    <ul class="image-list">
+      {% for product in products %}
+        <a href="{% url 'product_detail' product.id %}">
+
+            <img class="image-item" src="{{ product.image.url }}" />
+            <p class="para1">{{ product.name }}</p>
+            <p class="para1">{{ product.price }}$</p>
+
+        </a>
+      {% endfor %}
+    </ul>
+
+    <button id="next-slide" class="slide-button material-symbols-rounded">
+      chevron_right
+    </button>
+  </div>
+
+  <div class="slider-scrollbar">
+    <div class="scrollbar-track">
+      <div class="scrollbar-thumb"></div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+
+
+
+

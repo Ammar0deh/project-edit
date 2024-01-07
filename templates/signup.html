@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'Structure/css/signup.css' %}">
+    <title>Document</title>
+</head>
+<body>
+    <div class="form-structor">
+        <div class="signup">
+            <h2 class="form-title" id="signup"><span>or</span>Sign up</h2>
+            <div class="form-holder">
+
+                <form method="post" action="." style="font-size: medium;">
+                {% csrf_token %}
+                <div class="input">
+                    {{ form.username }}
+                </div>
+                <div class="input">
+                    {{ form.email }}
+                </div>
+                <div class="input">
+                    {{ form.password1 }}
+                </div>
+                <div class="input">
+                    {{ form.password2 }}
+                </div>
+
+                {% if form.errors or form.non_field_errors %}
+                <div class="mb-3 p-6 bg-red-100 rounded-xl">
+                    {% for field in form %}
+                        {{ field.errors }}
+                    {% endfor %}
+
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+
+
+            </div>
+            <button class="submit-btn">Sign up</button>
+        </form>
+    </div>
+
+
+
+</body>
+</html>

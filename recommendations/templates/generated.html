@@ -1,0 +1,26 @@
+<!-- recommendations/templates/generated.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generated Recommendations</title>
+</head>
+<body>
+
+<h1>Generated Recommendations</h1>
+
+{% if generated_recommendations %}
+    <ul>
+        {% for recommendation in generated_recommendations %}
+            <li>
+                <strong>Product:</strong> {{ recommendation.product_name }}<br>
+                <strong>Confidence:</strong> {{ recommendation.confidence }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No recommendations available.</p>
+{% endif %}
+
+</body>
+</html>

@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block 'styles' %}
+<!-- Custom Google Fonts-->
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&family=Roboto:wght@300;400;700&display=auto"
+  rel="stylesheet">
+
+<!-- Favicon -->
+<link rel="apple-touch-icon" sizes="180x180" href="{% static 'cart/images/favicon/apple-touch-icon.png' %}">
+<link rel="icon" type="image/png" sizes="32x32" href="{% static 'cart/images/favicon/favicon-32x32.png' %}">
+<link rel="icon" type="image/png" sizes="16x16" href="{% static 'cart/images/favicon/favicon-16x16.png' %}">
+<link rel="mask-icon" href="{% static 'cart/images/favicon/safari-pinned-tab.svg' %}" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<!-- Vendor CSS -->
+<link rel="stylesheet" href="{% static 'cart/css/libs.bundle.css' %}" />
+
+<!-- Main CSS -->
+<link rel="stylesheet" href="{% static 'cart/css/theme.bundle.css' %}" />
+
+  <style>
+   
+    body {
+        background-color: white; /* Change this to the color you want */
+        /* You can use color names, hex values, RGB, RGBA, HSL, HSLA, etc. */
+    }
+  </style>
+{% endblock %}
+
+{% block 'main' %}
+
+    <!-- Main Section-->
+    <section class="mt-0 overflow-lg-hidden  vh-lg-100">
+        <!-- Page Content Goes Here -->
+        <div class="container">
+
+            <div class="row vh-lg-100">
+                <div class="bg-white col-12 col-lg-7 pt-5 pt-lg-10">
+                    <div class="pe-lg-5 ">
+                        
+                        <nav class="d-none d-md-block">
+                            <ul class="list-unstyled d-flex justify-content-start mt-4 align-items-center fw-bolder small">
+                                <li class="me-4"><a class="nav-link-checkout" href="{% url 'home' %}">Home</a></li>
+
+                                <li class="me-4"><a class="nav-link-checkout active">Your cart</a></li>
+                               
+                            </ul>
+                        </nav>                        
+                        <div class="mt-5">
+                            <div class="table-responsive">
+                                <table class="table align-middle">
+                                    <tbody class="border-0" id="cartTable">
+
+
+                                    <!-- Cart Items-->
+                                        {% for product_cart in cart.products.all %}
+                                        <!-- Cart Item-->
+                                            <div class="row mx-0 py-4 g-0 border-bottom">
+                                                <div class="col-2 position-relative">
+                                                    <picture class="d-block border">
+                                                        <a href="{% url 'product_detail' product_cart.product.id %}">
+                                                            <img class="img-fluid" src="{{ product_cart.product.image.url }}" alt=""/>
+                                                        </a>
+                                                    </picture>
+                                                </div>
+                                                <div class="col-9 offset-1">
+                                                    <div>
+                                                        <h6 class="justify-content-between d-flex align-items-start mb-2">
+                                                            <a class="text-decoration-none" href="{% url 'product_detail' product_cart.product.id %}"> {{product_cart.product.name}} 
+                                                            </a>
+                                                            <a href="{% url 'delete_product' product_cart_id=product_cart.id %}"> <i class="ri-close-line ms-3" id="closeIcon-${product.id}"></i> </a>
+                                                        </h6>
+                                                    </div>
+                                                    <a href="{% url 'product_detail' product_cart.product.id %}">
+                                                        <p class="fw-bolder text-end text-muted m-0">${{product_cart.product.price}}</p>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        <!-- / Cart Item-->
+                                        {% endfor %}
+
+                                    <!-- / Cart Items-->
+
+                                    </tbody>
+                                </table>
+
+                                <div id="noProductsMessage" class="text-center text-muted mt-4" style="display: none;">
+                                    Aún no has añadido ningún producto.
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-5 bg-light pt-lg-10 aside-checkout pb-5 pb-lg-0 pt-4 my-5 my-lg-0">
+                    <div class="p-4 py-lg-0 pe-lg-0 ps-lg-5">
+                        <div class="pb-4 border-bottom">
+                            <h3 class="fs-5 fw-bolder mb-4 border-bottom pb-4">Tu Carrito</h3>
+
+                            <div class="d-flex flex-column flex-md-row justify-content-md-between mb-4 mb-md-2">
+
+                                <div>
+                                    <p class="m-0 fw-bold fs-5">Total</p>
+                                </div>
+                                <p class="m-0 fs-5 fw-bold" id="cartTotal">${{cart.total}}</p>
+                            </div>
+                        </div>
+                        
+                        <a href="{% url 'checkout' cart_id=cart.id %}" class="btn btn-dark w-100 text-center py-4" role="button" id="finalizarCompraBtn">Checkout</a>                    </div>
+                </div>
+            </div>
+            
+
+        </div>
+        <!-- /Page Content -->
+    </section>
+    <!-- / Main Section-->
+
+    
+    <h1>Cart Recommendations</h1>
+    
+    <p>All Product Names: {{ all_product_names }}</p>
+    
+    {% if recommendations %}
+        <ul>
+            {% for recommendation in recommendations %}
+                <li>Recommended Product: {{ recommendation }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No recommendations available.</p>
+    {% endif %}
+{% endblock %}
+ 
+{% block 'extra_scripts' %}
+
+    <!-- Vendor JS -->
+    <script src="{% static 'cart/js/vendor.bundle.js' %}"></script>
+    
+    <!-- Theme JS -->
+    <script src="{% static 'cart/js/theme.bundle.js' %}"></script>
+
+{% endblock %}

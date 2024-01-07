@@ -1,0 +1,32 @@
+(the scinario is next i have table called(products_productcart) this table contain two column and both of them are forigen keys (cart_id) in this column it defines the customer cart .
+(product_id) defines what the products client bought .
+and (id) column it's primary key defins by defult from django .
+so for example if we have 3 :
+product_1 
+product_2
+product_3
+and the client bought the three products the dataset will be :
+
+id,cart_id,product_id
+1,1,product_1
+2,1,product_2
+3,1,product_3
+
+what i need is to make one column for the products like this for example if the client bought the three products to be one field combine the three products for example:
+
+transaction
+product_1,product_2,product_3
+
+
+
+
+
+i think i gaved somthing rong i want a new table and the data be writen inside it in one column like this after pressing submting the payment code :
+
+transaction
+product_1,product_2,product_3
+product_3
+product_2
+
+
+each row represent what client or customer bought 

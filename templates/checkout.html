@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block 'styles' %}
+  <!-- Custom Google Fonts-->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&family=Roboto:wght@300;400;700&display=auto"
+    rel="stylesheet">
+
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'cart/images/favicon/apple-touch-icon.png' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'cart/images/favicon/favicon-32x32.png' %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'cart/images/favicon/favicon-16x16.png' %}">
+  <link rel="mask-icon" href="{% static 'cart/images/favicon/safari-pinned-tab.svg' %}" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- Vendor CSS -->
+  <link rel="stylesheet" href="{% static 'cart/css/libs.bundle.css' %}" />
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="{% static 'cart/css/theme.bundle.css' %}" />
+
+  <!-- Fix for custom scrollbar if JS is disabled-->
+  <noscript>
+    <style>
+      /**
+          * Reinstate scrolling for non-JS clients
+          */
+      .simplebar-content-wrapper {
+        overflow: auto;
+      }
+    </style>
+  </noscript>
+
+  {% endblock %}
+
+  {% block 'main' %}
+    <!-- Main Section-->
+    <section class="mt-0  vh-lg-100">
+        <!-- Page Content Goes Here -->
+        <div class="container">
+            <div class="row g-0 vh-lg-100">
+                <div class="col-lg-7 pt-5 pt-lg-10">
+                    <div class="pe-lg-5">
+                        <!-- Logo-->
+                        <a class="navbar-brand fw-bold fs-3 flex-shrink-0 mx-0 px-0" href="./index.html">
+                                <div class="d-flex align-items-center">
+                                  MyStore </div>
+                            </a>
+                        <!-- / Logo-->
+                        <nav class="d-none d-md-block">
+                            <ul class="list-unstyled d-flex justify-content-start mt-4 align-items-center fw-bolder small">
+                                <li class="me-4"><a class="nav-link-checkout "
+                                  href="{% url 'home' %}">Home</a></li>
+                                {% if cart.done == False %}<li class="me-4"><a class="nav-link-checkout "
+                                        href="{% url 'cart' %}">Cart</a></li> {% else %}{% endif %}
+                                <li class="me-4"><a class="nav-link-checkout active">Checkout</a></li>
+                                                                
+                            </ul>
+                        </nav>                        <div class="mt-5">
+
+
+
+
+                            <!-- Checkout Panel Information-->
+                            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-4 my-4">
+                              <h3 class="fs-5 fw-bolder m-0 lh-1">Contact information {{cart.client.user.username}}</h3>
+                              
+                            </div>
+                            
+                            <div class="row" id="profile-form">
+                              <form method="post">{% csrf_token %}
+                                <!-- First Name-->
+                                <div class="col-sm-6">
+                                  <div class="form-group">
+                                    <label for="name" class="form-label">Name</label>
+                                    {{client_form.first_name}}
+
+                                  </div>
+                                </div>
+                              
+                                <!-- Last Name-->
+                                <div class="col-sm-6">
+                                  <div class="form-group">
+                                    <label for="lastname" class="form-label">Lastname</label>
+                                    {{client_form.last_name}}
+                                  </div>
+                                </div>
+
+                                <!-- phone Number-->
+                                <div class="col-sm-12">
+                                  <div class="form-group">
+                                    <label for="phone" class="form-label">Phone number</label>
+                                     {{client_form.phone_number}}
+
+                                  </div>
+                                </div>
+
+                                <!-- Address-->
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                      <label for="phone" class="form-label">Address</label>
+                                  {{client_form.address}}
+                                    </div>
+                                  </div>
+
+
+                                <div class="py-2">
+                                  <div class="input-group mb-0 d-flex flex-row-reverse">
+                                      <button type="submit" class="btn btn-dark btn-sm px-4 py-3 mb-4" id="submit-button" name="client_form">Update</button>    <!-- ACA MANDAR UN OK DESDE EL FRONT -->
+
+                                  </div>
+                              </div>
+                            </form>
+
+                            </div>
+                            
+                            
+                            
+                            
+                            
+                                               </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5 bg-light pt-lg-10 aside-checkout pb-5 pb-lg-0 my-5 my-lg-0">
+                    <div class="p-4 py-lg-0 pe-lg-0 ps-lg-5">
+                        <div class="pb-3"  id="cartTable">
+
+
+                            <!-- Cart Item-->
+                            
+                        </div>
+                        
+                        <div class="py-4 border-bottom">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <p class="m-0 fw-bold fs-5">Total</p>
+                                </div>
+                                <p class="m-0 fs-5 fw-bold" id="cartTotal">${{cart.total}}                           {% if cart.done == True %} (paid) {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        {% if cart.done == False %}
+
+                        <div class="py-4">
+                          <div class="pb-5 d-flex justify-content-md-end align-items-center">
+                            <a href="https://paypal.me/patafeet?country.x=AR&locale.x=es_XC" class="btn btn-dark w-100 w-md-auto" role="button" target="_blank">Pay</a> 
+                          </div>    
+                        </div>
+                        {% endif %}
+                        <div class="py-4">
+                          <div class="pb-5 d-flex justify-content-md-end align-items-center">
+                            {% if cart.done == False %}
+                            <p>By clicking, a new window to my wallet will open. Enter the total amount from above and send the money. Copy the transaction code here. After payment, we will contact you by email.</p>
+                            {% else %}
+                            <p>Your pay is being checked. Please hold and we will contact you for the delivery. Or send a email to ammarodeh@gmail.com if you have any question or issue. Thanks </p>
+                            {% endif %}
+
+                          </div>    
+                          {% if cart.done == False %}
+
+                          <div class="row" id="profile-form">
+                            <form method="post">{% csrf_token %}
+                            
+                              <!-- Address-->
+                              <div class="col-sm-12">
+                                  <div class="form-group">
+                                    <label for="payment_code" class="form-label"></label>
+                                        {{cart_form.payment_code}}
+                                  </div>
+                                </div>
+
+
+                              <div class="py-2">
+                                <div class="input-group mb-0 d-flex flex-row-reverse">
+                                    <button type="submit" class="btn btn-dark btn-sm px-4 py-3 mb-4" id="submit-button" name="cart_form">Submit</button>  
+
+                                </div>
+                              </div>
+                            </form>
+
+                          </div>
+                          {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Page Content -->
+    </section>
+    <!-- / Main Section-->
+
+    {% endblock %}
+ 
+    {% block 'extra_scripts' %}
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Theme JS -->
+    <!-- Vendor JS -->
+    <script src="{% static 'cart/js/vendor.bundle.js' %}"></script>
+    
+    <!-- Theme JS -->
+    <script src="{% static 'cart/js/theme.bundle.js' %}"></script>
+    {% endblock %}

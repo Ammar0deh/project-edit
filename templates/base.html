@@ -1,0 +1,236 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="{% static 'Structure/css/navbar.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
+
+    {% block 'styles' %}
+    <link rel="stylesheet" href="{% static 'Structure/css/output.css' %}">
+    <link rel="stylesheet" href="{% static 'Structure/css/cards2.css' %}">
+    <link rel="icon" href="{% static 'Structure/images/favicon.ico' %}" type="image/x-icon">
+    <style>
+      body {
+          background-color: rgba(40, 42, 58, 0.205); /* Change this to the color you want */
+          /* You can use color names, hex values, RGB, RGBA, HSL, HSLA, etc. */
+      }
+    </style>
+
+    {% endblock %}
+
+
+    <style>
+      
+
+      
+      .card__slide:nth-child(1) .image {
+        background-image: url("{% static '/Structure/images/p8.png' %}");
+        background-size: 100% auto;
+        background-position:center;
+        background-repeat: no-repeat;
+        width: 30%;
+        height: 150%;
+        position: absolute;
+        top: 50%;
+        left: 25%;
+        transform: translate3d(-55%, -40%, 0);
+        z-index: 2;
+        opacity: 0;
+
+
+
+      }
+.back__slide:nth-child(2):before {
+background-image: url("{% static '/Structure/images/p8.png' %}");
+opacity: 0.2;
+background-repeat: no-repeat;
+background-size: 101% auto;
+background-position: right calc(50% - 14rem);
+}
+.back__slide:nth-child(2) .back-front-image {
+position: absolute;
+top: 0;
+left: 0;
+min-width: 100%;
+height: 100%;
+background-image: url("{% static '/Structure/images/bgw.jpg' %}");
+background-size: 150% auto;
+background-position: center calc(50% + 21rem);
+background-repeat: no-repeat;
+z-index: 0;
+opacity: 0;
+transform: translate3d(0, 10rem, 0);
+transition: transform 600ms 300ms linear, opacity 300ms 500ms linear;
+}
+.card__slide:nth-child(2) .image {
+background-image: url("{% static '/Structure/images/W_g.png' %}");
+background-size: 100% auto;
+background-position: 50% top;
+background-repeat: no-repeat;
+width: 100vw;
+height: 100%;
+position: absolute;
+top: 10%;
+left: -5vw;
+transform: translate3d(0, 20%, 0);
+z-index: 2;
+opacity: 0;
+pointer-events: none;
+z-index: 1;
+transition: transform 600ms 300ms linear, opacity 300ms 500ms linear;
+}
+.card__slide:nth-child(2) .back-image {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-image: url("{% static '/Structure/images/bgw.jpg' %}");
+background-size: 100% auto;
+background-position: center 100%;
+background-repeat: no-repeat;
+z-index: 1;
+opacity: 0;
+transform: translatey(0);
+transition: transform 600ms 300ms linear, opacity 300ms 500ms linear;
+}
+
+  </style>
+</head>
+
+
+<body>
+  
+
+{% block 'main' %}
+  <!--navbar-->
+
+
+  <nav class="nav">
+    <div class="container2 mb-5">
+        <div class="logo">
+            <a href="#">HypeJo</a>
+        </div>
+        <div id="mainListDiv" class="main_list">
+            {% block signup %}
+            <ul class="navlinks">
+              {% if request.user.is_authenticated %}
+              <ul>
+                  <li><a href=#>dashboard</a></li>
+                  <li><a href="#"> inbox </a></li>
+                  <li><a href="#" id="logout-link">Logout</a></li>
+
+              </ul>
+          {% else %}
+              <ul>
+                  <li><a href="{% url 'signup' %}">Signup</a></li>
+                  <li><a href="{% url 'login' %}">Login</a></li>
+                  <li><a href="#">Services</a></li>
+                  <li><a href="#">Contact</a></li>
+              </ul>
+          {% endif %}
+        </div>
+        <span class="navTrigger">
+            <i></i>
+            <i></i>
+            <i></i>
+        </span>
+    </div>
+</nav>
+{% endblock %}
+<!-- Jquery needed -->
+
+
+
+
+<!--cardsanimation-->
+
+
+
+{% block 'content' %}
+
+{% endblock %}
+
+<script  src= "{% static 'Structure/js/navbar.js' %}"></script>
+<script src="{% static 'Structure/js/scrollanimation.js' %}"></script>
+<script src="{% static 'Structure/js/cards2.js' %}"></script>
+
+     
+     <script>
+      $('.s-checkbox').on('change', function() {
+             $('.s-checkbox').not(this).prop('checked', false);
+         });
+     </script>
+
+<script>
+    date = new Date();
+  
+    const dayType = {
+      dayTypeS: function() {
+        if (date.getDay() == 0)
+          return "Sunday";
+        else if (date.getDay() == 1)
+          return "Monday";
+        else if (date.getDay() == 2)
+          return "Tuesday";
+        else if (date.getDay() == 3)
+          return "Wednesday";
+        else if (date.getDay() == 4)
+          return "Thursday";
+        else if (date.getDay() == 5)
+          return "Friday";
+        else
+          return "Saturday";
+      }
+    };
+  
+    var DateElement = document.getElementById("Today's_Date");
+    // Concatenate the year, month, and dayTypeS result
+    DateElement.innerHTML = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + dayType.dayTypeS();
+  
+    var TimeElement = document.getElementById("Today's_Time");
+    // Concatenate the hours, minutes, day of the week
+    TimeElement.innerHTML = date.getHours() + ":" + date.getMinutes() + " " + dayType.dayTypeS();
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var logoutLink = document.getElementById('logout-link');
+        if (logoutLink) {
+            logoutLink.addEventListener('click', function(event) {
+                event.preventDefault();  // Prevent the default behavior of the link
+    
+                var form = document.createElement('form');
+                form.method = 'post';
+                form.action = '{% url "logout" %}';  
+                document.body.appendChild(form);
+    
+                var csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = 'csrfmiddlewaretoken';
+                csrfInput.value = '{{ csrf_token }}';  // Include the CSRF token value
+                form.appendChild(csrfInput);
+    
+                form.submit();
+            });
+        }
+    });
+    </script>
+    
+{% endblock %}
+
+
+<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+  {% block 'extra_scripts' %}
+  {% endblock %}
+</body>
+</html>
+

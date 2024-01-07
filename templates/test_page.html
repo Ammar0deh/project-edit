@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Product Card</title>
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+</head>
+<body>
+    <div class="wrapper">
+        <div class="product-area">
+            {% for product in products %}
+                <div class="img-area">
+                    <img alt="Product 1" src="{{ product.image.url }}">
+                    <div class="product-overlay">
+                        <div class="overlay">
+                            <a class="btn-1" href="#">Add to Cart</a> 
+                            <a class="btn-2" href="#">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-area">
+                    <h3>{{ product.name }}</h3>
+                    <div class="rating">
+                        <span class="fa fa-star checked"></span> 
+                        <span class="fa fa-star checked"></span> 
+                        <span class="fa fa-star checked"></span> 
+                        <span class="fa fa-star"></span> 
+                        <span class="fa fa-star"></span>                    
+                    </div>
+                    <div class="product-price">
+                        {{ product.price }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <style>
+    body {
+	background: #262626;
+	font-family: 'Montserrat', sans-serif;
+}
+.wrapper {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	width: 80%;
+	margin: 5% auto;
+}
+.product-area {
+	width: 30%;
+	margin-bottom: 30px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+	position: relative;
+	overflow: hidden;
+	background-color: #fff;
+	border-radius: 25px;
+}
+.img-area {
+	position: relative;
+	width: 100%;
+}
+.img-area img {
+	width: 100%;
+	height: auto;
+	display: block;
+}
+.product-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0
+}
+.product-overlay:hover {
+	opacity: 0.9;
+	background-color: rgba(0, 0, 0, 0.6);
+	transition: opacity 0.5s ease;
+}
+.overlay {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+}
+.btn-1 {
+	display: inline-block;
+	padding: 10px 20px;
+	background-color: #e74c3c;
+	color: #fff;
+	font-size: 14px;
+	text-transform: uppercase;
+	text-decoration: none;
+}
+.btn-2 {
+	display: inline-block;
+	padding: 10px 20px;
+	background-color: #3498db;
+	color: #fff;
+	font-size: 14px;
+	text-transform: uppercase;
+	text-decoration: none;
+}
+.info-area {
+	padding: 10px 20px;
+	text-align: center;
+	background: #000;
+}
+.info-area h3 {
+	font-size: 30px;
+	margin: 0;
+	margin-bottom: 10px;
+	color: #fff;
+	font-family: 'Bebas Neue', sans-serif;
+}
+.rating {
+	margin-bottom: 10px;
+}
+.rating span {
+	color: #fff;
+}
+.checked {
+	color: orange !important;
+}
+.product-price {
+	font-size: 25px;
+	color: #fff;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+@media (max-width: 768px) {
+	.product-area {
+		width: 48%;
+	}
+}
+@media (max-width: 576px) {
+	.product-area {
+		width: 100%;
+	}
+}
+
+    </style>
+</body>
+</html>
+
+
