@@ -1,14 +1,18 @@
+import json
 from django.shortcuts import render , get_object_or_404, redirect
 from django.http import HttpResponse
 from django.urls import reverse
 from products.forms import ClientForm, CartForm
 from .models import Products, \
-                    Cart, ProductCart, Client, Order ,Transaction,CartProductNames
-from recommendations.models import Result
+                    Cart, ProductCart, Client, Order ,Transaction ,Category , LiveCart ,ResultCons
+from association_rules.models import Result
 from itertools import groupby
-
+from django.db.models import Q
+from django.http import JsonResponse
 ############################################
 import xml.etree.ElementTree as ET
+from django.contrib.sessions.models import Session
+from django.contrib.sessions.backends.db import SessionStore
 
 def get_client_transactions(request, client_id):
     client = Client.objects.filter(id=client_id).first()
@@ -112,18 +116,24 @@ def cart(request):
     
 def checkout(request, cart_id):
     cart = Cart.objects.filter(id=cart_id).first()
+    template_name = 'checkout.html'
+    context = {'cart': cart}
+
     if request.method == 'GET':
+        # Fetch associated products
+        associated_products = recommend_products(cart)
+        context['associated_products'] = associated_products
+
         client_form = ClientForm(instance=cart.client)
         cart_form = CartForm(instance=cart)
-        context = {
-        'cart' : cart,
-        'client_form': client_form,
-        'cart_form': cart_form,
-        }
+        context.update({
+            'client_form': client_form,
+            'cart_form': cart_form,
+        })
 
-        template_name = 'checkout.html'
         return render(request, template_name, context)
-    if request.method == 'POST':
+
+    elif request.method == 'POST':
         if 'client_form' in request.POST:
             client_form = ClientForm(request.POST, instance=cart.client)
             if client_form.is_valid():
@@ -145,40 +155,89 @@ def checkout(request, cart_id):
                 transaction = Transaction.create_transaction(client=updated_cart.client, product_list=product_list, payment_code=payment_code)
 
         return redirect('checkout', cart.id)
+
     
+def browse(request):
+    query = request.GET.get('query', '')
+    category_id = request.GET.get('category', 0)
+    categories = Category.objects.all()
+    products = Products.objects.filter(available=True)  # Use 'products' instead of 'browse'
+
+    if category_id:
+        products = products.filter(category_id=category_id)
+
+    if query:
+        products = products.filter(Q(name__icontains=query) | Q(descrption__icontains=query))
+
+    return render(request, 'browse.html', {  # Correct template name and variable name
+        'products': products,  # Correct variable name
+        'query': query,
+        'categories': categories,
+        'category_id': int(category_id)
+    })
+def recommend_products(request, cart):
+    # Fetch the LiveCart object based on the client
+    live_cart = LiveCart.objects.filter(cart_id=cart.id).first()
+    print("Live Cart:", live_cart)
+
+    # Convert live_cart.product_names to a list
+    product_names_list = json.loads(live_cart.product_names)
+    print("Product Names List:", product_names_list)
+
+    # Fetch the association rule for the given live_cart
+    association_rule = Result.objects.filter(antecedent__contains=product_names_list).first()
+    print("Association Rule:", association_rule)
+
+    recommended_products = []
+
+    if association_rule:
+        # Check if the antecedent in the association rule matches the product_names_list
+        if all(product in association_rule.antecedent for product in product_names_list):
+            # Fetch the consequent from the association rule
+            consequent_products = association_rule.consequent.split(', ')
+            print("Consequent Products:", consequent_products)
+
+            # Save the consequent and cart_id in the ResultCons model
+            result_cons = ResultCons.objects.create(cart_id=cart.id, consequent=', '.join(consequent_products))
+            result_cons.save()
+
+            # Assuming there is a Product model with 'name', 'image', 'price', and 'description' fields
+            recommended_products = Products.objects.filter(name__in=consequent_products)
+            print("Recommended Products:", recommended_products)
+
+            # Store recommendations in the user's session
+            user_id = request.user.id if request.user.is_authenticated else None
+            session_key = request.session.session_key
+
+            if user_id and session_key:
+                # Create a custom key based on user_id and session_key
+                recommendations_key = f"recommendations_{user_id}_{session_key}"
+
+                # Store recommendations in the session
+                request.session[recommendations_key] = list(recommended_products.values_list('name', flat=True))
+                print("Product Names in Products Model:", Products.objects.filter(name__in=consequent_products).values_list('name', flat=True))
+
+    return recommended_products
 
 
 
 
-def reco_cart(request):
-    # Retrieve data from CartProductNames
-    cart_product_names = CartProductNames.objects.all()
 
-    all_product_names = set()
-    recommendations = set()
 
-    # Debugging: Print information about CartProductNames
-    print("CartProductNames:")
-    for cart_product in cart_product_names:
-        # Collect all product names from CartProductNames
-        product_names = cart_product.product_names.split(', ')
-        print(cart_product.cart_id, product_names)
-        all_product_names.update(product_names)
 
-    # Query recommendations for all product names
-    antecedent_matches = Result.objects.filter(antecedent__overlap=list(all_product_names))
 
-    # Debugging: Print information about Recommendations
-    print("All Product Names:", all_product_names)
-    print("Recommendations:")
-    for match in antecedent_matches:
-        consequent_ids = match.consequent
-        if consequent_ids:
-            consequent_names = Products.objects.filter(id__in=consequent_ids).values_list('name', flat=True)
-            print(consequent_names)
-            recommendations.update(consequent_names)
 
-    return render(request, 'cart.html', {'all_product_names': all_product_names, 'recommendations': recommendations})
+
+def cart_view(request):
+    cart = LiveCart.objects.get(user=request.user)
+    print("Cart ID:", cart.id)
+    print("Product Names:", cart.product_names)  # Check if product_names contains the expected data
+
+    # Call the recommend_products function to get recommendations
+    recommendations = recommend_products(request, cart)
+
+    # Render the cart.html template with the cart and recommendations
+    return render(request, 'cart.html', {'cart': cart, 'recommendations': recommendations})
 
 
 
